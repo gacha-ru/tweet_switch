@@ -1,0 +1,12 @@
+# AWS accesskey
+[aws_keys]
+AWS_ACCESS_KEY = access_key(Permissions:sqs only)
+AWS_SECRET_ACCESS_KEY = secret_access_key(Permissions:sqs only)
+REGION = ap-northeast-1
+
+# Twitter token
+[twitter_keys]
+ConsumerKey =    twitter_consumerkey
+ConsumerSecret = twitter_consumersecret
+AccessToken =    twitter_accesstoken
+AccesssTokenSecert = twitter_accessstokensecert
