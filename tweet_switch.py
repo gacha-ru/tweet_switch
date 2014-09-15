@@ -93,15 +93,21 @@ def tweet(sqs_session, queue, message):
         # レスポンスを確認
         if req.status_code == 200:
             print ("%s をtweetしました" % tweet)
+            print "======================================="
             queue.delete_message(msg)
         else:
             print ("Error: %d" % req.status_code)
             print ("message: %s" % tweet)
             return_value_analysis(return_message, msg)
+            print "======================================="
+
+        usage()
 
     elif review == "No":
         print "tweetやんぴ"
+        print "======================================="
         queue.delete_message(msg)
+        usage()
 
 
 # tweetするか確認
@@ -140,11 +146,22 @@ def return_value_analysis(return_message, msg):
         print duplicate_message
         queue.delete_message(msg)
 
+
+def usage():
+    usage_message = ('=======================================\n'
+                     'tweet: Yesスイッチ\n'
+                     '終了 : [Ctrl+c]\n')
+
+    print usage_message
+
+
 if __name__ == '__main__':
 
     try:
         # botoでSQS情報を取得
         sqs_session = sqs_connect()
+
+        usage()
 
         while True:
             # raspberry pi GPIO init
@@ -170,6 +187,8 @@ if __name__ == '__main__':
                     tweet(sqs_session, queue, queue_message)
                 else:
                     print "ないでキュー"
+                    print "======================================="
+                    usage()
 
             elif input == 1:
                 pi_switch = "False"
