@@ -62,6 +62,7 @@ def tweet(sqs_session, queue, message):
     # ツイート投稿用のURL
     url = "https://api.twitter.com/1.1/statuses/update.json"
 
+    # キューからメッセージを取得
     for msg in message:
         tweet_message = msg.get_body()
 
@@ -86,21 +87,26 @@ def tweet(sqs_session, queue, message):
             # status codeが200以外だった場合はErrorの内容を返す
             print ("Error: %d" % req.status_code)
             print ("message: %s" % tweet_message)
-            return_value_analysis(return_message)
-            queue.delete_message(msg)
+            return_value_analysis(return_message, msg)
+
     else:
+        # キューを削除
         queue.delete_message(msg)
         print ("%s を闇に葬り去りました\n" % tweet_message)
 
 
 # エラーメッセージの内容を返す
-def return_value_analysis(return_message):
+def return_value_analysis(return_message, msg):
     error_value = return_message["errors"]
-    yutai = error_value[0]
-    if yutai["message"] in "Status is a duplicate.":
+    error_message = error_value[0]
+
+    # "Status is a duplicate."は同じ内容を既につぶやいていると言う事
+    # メッセージを出しキューを削除
+    if error_message["message"] in "Status is a duplicate.":
         duplicate_message = ('同じこといっとるでー!かえなかえな〜(^o^)/\n'
                              '消しとくねー(^-^)それなー(^_<)=★')
         print duplicate_message
+        queue.delete_message(msg)
 
 
 if __name__ == '__main__':

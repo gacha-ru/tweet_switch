@@ -88,6 +88,7 @@ def tweet(sqs_session, queue, message):
         # OAuth認証で POST method で投稿
         twitter = OAuth1Session(CK, CS, AT, AS)
         req = twitter.post(url, params=params)
+        return_message = req.json()
 
         # レスポンスを確認
         if req.status_code == 200:
@@ -96,7 +97,7 @@ def tweet(sqs_session, queue, message):
         else:
             print ("Error: %d" % req.status_code)
             print ("message: %s" % tweet)
-            queue.delete_message(msg)
+            return_value_analysis(return_message, msg)
 
     elif review == "No":
         print "tweetやんぴ"
@@ -125,6 +126,19 @@ def tweet_review():
             GPIO.cleanup()
             return "No"
 
+
+# エラーメッセージの内容を返す
+def return_value_analysis(return_message, msg):
+    error_value = return_message["errors"]
+    error_message = error_value[0]
+
+    # "Status is a duplicate."は同じ内容を既につぶやいていると言う事
+    # メッセージを出しキューを削除
+    if error_message["message"] in "Status is a duplicate.":
+        duplicate_message = ('同じこといっとるでー!かえなかえな〜(^o^)/\n'
+                             '消しとくねー(^-^)それなー(^_<)=★')
+        print duplicate_message
+        queue.delete_message(msg)
 
 if __name__ == '__main__':
 
