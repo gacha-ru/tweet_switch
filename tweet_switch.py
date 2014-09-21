@@ -145,6 +145,9 @@ def return_value_analysis(return_message, msg):
                              '消しとくねー(^-^)それなー(^_<)=★')
         print duplicate_message
         queue.delete_message(msg)
+    else:
+        print error_message["message"]
+        print ("キューは消さずに戻しときますね")
 
 
 def usage():
