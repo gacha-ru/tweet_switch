@@ -24,16 +24,26 @@ AccessToken =    twitter_accesstoken
 AccesssTokenSecert = twitter_accessstokensecert
 ```
 
+3. python module installation
+```
+$ pip install boto
+$ pip install RPi.GPIO
+$ pip install requests requests_oauthlib
+```
+
+
 # Description
 
 * sqs_send_queue.py  
   storing your "tweet message" queue in evil_tweet  
     ```$ python sqs_send_queue.py "tweet message"```
+![sqs_send_queue_demo.gif](https://qiita-image-store.s3.amazonaws.com/0/38286/b75cd080-971c-d8f2-b565-c92a81ef1d0a.gif "sqs_send_queue_demo.gif")
 
 * tweet_switch.py  
   evil_tweet from Queuing, you choose to tweet  
   works only with raspberry pi available (to use the GPIO)  
     ```$ python tweet_switch.py```
+![tweet_switch_demo01.gif](https://qiita-image-store.s3.amazonaws.com/0/38286/763e4f5a-fbfc-6553-2ab5-b41186fa29bb.gif "tweet_switch_demo01.gif")
 
 * local_tweet_script.py  
   evil_tweet from Queuing, you choose to tweet  
